@@ -59,20 +59,43 @@ def getLargePrime(bitSize):
 		testPrime = random.randint(lowerBound, upperBound)
 		if millerRabin(testPrime):
 			return testPrime
-# def getLargeProduct():
+
+
+# return gcd(a, b), x, and y, such that gcd(a, b) = ax + by
+# best if a > b
+def extendedEuclid(a, b):
+	if b == 0:
+		# a = a * 1 + b * 0
+		return a, 1, 0
+	d, x, y = extendedEuclid(b, a % b)
+	return d, y, x - a // b * y 
+
+# returns d s.t. d === a^-1  (mod m)
+def modMulInv(a, m):
+	g, x, y = extendedEuclid(a, m)
+	# ax + my = 1 (mod m)
+	# Note: my = 0 (mod m) 
+	# x = a^-1 (mod m)
+	return x % m
 
 def main(argc, argv):
 	validateInput(argc, argv)
 	modulusSize = int(argv[1])
 	random.seed(datetime.now())
 	p = getLargePrime(modulusSize)
-	q = getLargePrime(modulusSize)
-	n = p * q
 	print("P: " + str(p))
+	q = getLargePrime(modulusSize)
 	print("Q: " + str(q))
+	n = p * q
 	print("N: " + str(n))
+	phiOfN = (p - 1) * (q - 1) 
+	print("phiOfN: " + str(phiOfN))
+	e = 2 ** 16 + 1
+	print("e: " + str(e))
+	d = modMulInv(e, phiOfN)
+	print("d: " + str(d))
 
-	#generate P and Q, such that their product, N is 
+
 
 if __name__ == "__main__":
 	main(len(argv), argv)
